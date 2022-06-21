@@ -102,7 +102,7 @@ var out = 0; //接口超时退出, 用于可能发生的网络不稳定, 0则关
 
 var $nobyda = nobyda();
 
-async function all() {
+const allFunc = async () => {
 
   if (stop == 0) {
     await Promise.all([
@@ -330,7 +330,7 @@ function ReadCookie() {
     boxdis = $nobyda.read("JD_Crash_disable") === "false" || $nobyda.isNode || $nobyda.isJSBox ? false : boxdis
     LogDetails = $nobyda.read("JD_DailyBonusLog") === "true" || LogDetails
     ReDis = ReDis ? $nobyda.write("", "JD_DailyBonusDisables") : ""
-    all()
+    allFunc()
   } else {
     $nobyda.notify("京东签到", "", "脚本终止, 未获取Cookie ‼️")
     $nobyda.done()
@@ -428,7 +428,7 @@ function JingDongTurn(s) {
         if (error) {
           throw new Error(error)
         } else {
-          const cc = JSON.parse(data).data.lotteryCode
+          const cc = JSON.parse(data).data ? JSON.parse(data).data.lotteryCode : null;
           const Details = LogDetails ? "response:\n" + data : '';
           if (cc) {
             console.log("\n" + "京东商城-转盘查询成功 " + Details)

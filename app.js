@@ -44,10 +44,14 @@ async function sendNotify (text,desp) {
 }
 
 async function start() {
-
-  const content = await exec("node JD_DailyBonus.js", {
-    encoding: 'utf8'
-  });
+  let content = '';
+  try {
+    content = await exec("node JD_DailyBonus.js", {
+      encoding: 'utf8'
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   if (serverJ) {
     let t = content.match(/【签到概览】:((.|\n)*)【签到总计】/)
