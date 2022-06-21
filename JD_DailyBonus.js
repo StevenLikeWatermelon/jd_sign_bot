@@ -2493,7 +2493,7 @@ function nobyda() {
   const isLoon = typeof $loon != "undefined"
   const isJSBox = typeof $app != "undefined" && typeof $http != "undefined"
   const isNode = typeof require == "function" && !isJSBox;
-  const NodeSet = 'CookieSet.json'
+  const NodeSet = '/tmp/CookieSet.json'
   const node = (() => {
     if (isNode) {
       const request = require('request');
