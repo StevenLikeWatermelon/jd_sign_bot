@@ -3,45 +3,9 @@
 // detail url: https://github.com/ruicky/jd_sign_bot
 
 const exec = require('child_process').execSync;
-const fs = require('fs');
 const rp = require('request-promise');
-const download = require('download');
-require('./JD_DailyBonus')
 // 公共变量
 const serverJ = 'SCT157017TlXYr1ryOmWAM4NHjeSBhJyRu';
-
-
-
-async function changeFile () {
-   let content = await fs.readFileSync('./JD_DailyBonus.js', 'utf8')
-   content = content.replace(/var Key = ''/, `var Key = '${KEY}'`);
-   await fs.writeFileSync( './JD_DailyBonus.js', content, 'utf8')
-}
-
-
-async function checkKey() {
-  let content = await fs.readFileSync('./JD_DailyBonus.js', 'utf8')
-  /// 如果没出现  返回 -1
-  console.log(content);
-  if (content.indexOf(/var Key = ''/) != -1) {
-    return 1;
-  }
-  return 0;
-}
-
-async function sendNotify (text,desp) {
-  const options ={
-    uri:  `https://sc.ftqq.com/${serverJ}.send`,
-    form: { text, desp },
-    json: true,
-    method: 'POST'
-  }
-  await rp.post(options).then(res=>{
-    console.log(res)
-  }).catch((err)=>{
-    console.log(err)
-  })
-}
 
 async function start() {
   let content = '';
@@ -58,8 +22,20 @@ async function start() {
     let res = t ? t[1].replace(/\n/,'') : '失败'
     let t2 = content.match(/【签到总计】:((.|\n)*)【账号总计】/)
     let res2 = t2 ? t2[1].replace(/\n/,'') : '总计0'
-    await sendNotify("" + ` ${res2} ` + ` ${res} ` + new Date().toLocaleDateString(), content);
+    let text = "" + ` ${res2} ` + ` ${res} ` + new Date().toLocaleDateString()
     console.log('发送通知');
+    const options ={
+      uri:  `https://sc.ftqq.com/${serverJ}.send`,
+      form: { text, content },
+      json: true,
+      method: 'POST'
+    }
+    rp.post(options).then(res=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    console.log('发送通知结束');
   }
 }
 
